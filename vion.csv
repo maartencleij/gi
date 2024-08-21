@@ -1,0 +1,4 @@
+VMName,ResourceGroupName
+snapshottest,snapshottest_group
+snapshottest1,snapshottest1_group
+snapshottest2,snapshottest2_group
