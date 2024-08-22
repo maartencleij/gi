@@ -1,24 +1,20 @@
-# Variables
-$AzTenantId = "34d03e7f-fa03-432a-a48d-53b8e084a3c8"
-$AzSubscriptionId = "c3c14b0b-5afb-4d91-87b6-b0964f310cc3"
-$TOPdeskActivity = "test"
-
 # Preferences
 $ErrorActionPreference = "Stop"
 
-# Strip spaces from activity number if they are present
-$TopdeskActivityWithoutSpaces = $TOPdeskActivity.Replace(" ", "")
+# Load VM names and other variables from CSV file
+$vmList = Import-Csv -Path "vmconfig.csv"
 
-# Load VM names and Resource Groups from CSV file
-$vmList = Import-Csv -Path "vmnames.csv"
+foreach ($vm in $vmList) {
+    $VMname = $vm.VMName
+    $ResourceGroupName = $vm.ResourceGroupName
+    $AzTenantId = $vm.AzTenantId
+    $AzSubscriptionId = $vm.AzSubscriptionId
+    $TOPdeskActivity = $vm.TOPdeskActivity
+    $TopdeskActivityWithoutSpaces = $TOPdeskActivity.Replace(" ", "")
 
-try {
-    Connect-AzAccount -TenantId $AzTenantId
-    Select-AzSubscription $AzSubscriptionId
-
-    foreach ($vm in $vmList) {
-        $VMname = $vm.VMName
-        $ResourceGroupName = $vm.ResourceGroupName
+    try {
+        Connect-AzAccount -TenantId $AzTenantId
+        Select-AzSubscription $AzSubscriptionId
 
         # Get the VM details
         $Vm2Snapshot = Get-AzVM -Name $VMname -ResourceGroupName $ResourceGroupName
@@ -57,7 +53,7 @@ try {
         } else {
             Write-Error ("Unable to find VM [ $($VMname) ] in [ $($ResourceGroupName) ] in subscription [$($AzSubscriptionId)]. Please check input and try again")
         }
+    } catch {
+        Write-Error ("Error thrown while logging into Azure or executing part of the procedure: $($_.Exception.Message)")
     }
-} catch {
-    Write-Error ("Error thrown while logging into Azure or executing part of the procedure: $($_.Exception.Message)")
 }

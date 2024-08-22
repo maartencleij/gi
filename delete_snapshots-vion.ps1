@@ -1,7 +1,7 @@
 # Variables
 $AzTenantId = "34d03e7f-fa03-432a-a48d-53b8e084a3c8"
 $AzSubscriptionId = "c3c14b0b-5afb-4d91-87b6-b0964f310cc3"
-$TOPdeskActivity = "test"
+$TOPdeskActivity = "tosti"
 
 # Preferences
 $ErrorActionPreference = "Stop"
