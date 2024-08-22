@@ -2,7 +2,7 @@
 $ErrorActionPreference = "Stop"
 
 # Load VM names and other variables from CSV file
-$vmList = Import-Csv -Path "vmconfig.csv"
+$vmList = Import-Csv -Path "delete_snapshots.csv"
 
 $jobs = @()
 
