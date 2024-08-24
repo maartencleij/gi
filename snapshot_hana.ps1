@@ -3,7 +3,7 @@ $ErrorActionPreference = "Stop"
 $StartVmAfterCompletion = $true
 
 # Load VM names and other variables from CSV file
-$vmList = Import-Csv -Path "snapshots_vion.csv"
+$vmList = Import-Csv -Path "snapshot_vion_hana.csv"
 
 $jobs = @()
 
@@ -30,7 +30,7 @@ foreach ($vm in $vmList) {
 
                 # Snapshot VM OS disk
                 $OsDiskSnapshotName = "$($Vm2Snapshot.StorageProfile.OsDisk.Name)-OS-$($TopdeskActivityWithoutSpaces)"
-                $OsDiskSnapShotConfig = New-AzSnapshotConfig -SourceUri $Vm2Snapshot.StorageProfile.OsDisk.ManagedDisk.Id -CreateOption Copy -Location $Vm2Snapshot.Location
+                $OsDiskSnapShotConfig = New-AzSnapshotConfig -SourceUri $Vm2Snapshot.StorageProfile.OsDisk.ManagedDisk.Id -CreateOption Copy -Location $Vm2Snapshot.Location --api-version 2022-03-02
                 New-AzSnapshot -Snapshot $OsDiskSnapShotConfig -SnapshotName $OsDiskSnapshotName -ResourceGroupName $Vm2Snapshot.ResourceGroupName
                 Write-Output ("Creating snapshot from [ $($Vm2Snapshot.StorageProfile.OsDisk.Name) ] completed successfully")
 
@@ -40,7 +40,7 @@ foreach ($vm in $vmList) {
                     foreach ($DataDisk in $Vm2SnapshotDataDisks) {
                         $DataDiskSnapshotName = "$($DataDisk.Name)-LUN_$($DataDisk.Lun)-$($TopdeskActivityWithoutSpaces)"
                         $DataDiskSnapshotUri = (Get-AzDisk -DiskName $DataDisk.Name -ResourceGroupName $Vm2Snapshot.ResourceGroupName).Id
-                        $DataDiskSnapShotConfig = New-AzSnapshotConfig -SourceUri $DataDiskSnapshotUri -CreateOption Copy -Location $Vm2Snapshot.Location
+                        $DataDiskSnapShotConfig = New-AzSnapshotConfig -SourceUri $DataDiskSnapshotUri -CreateOption Copy -Incremental -Location $Vm2Snapshot.Location
                         New-AzSnapshot -Snapshot $DataDiskSnapShotConfig -SnapshotName $DataDiskSnapshotName -ResourceGroupName $Vm2Snapshot.ResourceGroupName
                         Write-Output ("Creating snapshot from [ $($DataDisk.Name) ] completed successfully")
                     }
