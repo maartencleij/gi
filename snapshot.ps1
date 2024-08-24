@@ -3,7 +3,7 @@ $ErrorActionPreference = "Stop"
 $StartVmAfterCompletion = $true
 
 # Load VM names and other variables from CSV file
-$vmList = Import-Csv -Path "snapshots_vion_test.csv"
+$vmList = Import-Csv -Path "snapshots_vion_hana.csv"
 
 $jobs = @()
 

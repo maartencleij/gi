@@ -1,0 +1,3 @@
+VMName,ResourceGroupName,AzTenantId,AzSubscriptionId,TOPdeskActivity
+NLAZWLS4HN01P,SAP-PRD-WE-RG,de600c19-eb8d-4d21-a7cb-69707b0300a4,da07a388-f278-49f0-9e8e-42f481c8cc2d,sp4
+NLAZWLS4HN02P,sap-prd-we-rg,de600c19-eb8d-4d21-a7cb-69707b0300a4,da07a388-f278-49f0-9e8e-42f481c8cc2d,sp4
