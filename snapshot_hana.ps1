@@ -30,8 +30,8 @@ foreach ($vm in $vmList) {
 
                 # Snapshot VM OS disk
                 $OsDiskSnapshotName = "$($Vm2Snapshot.StorageProfile.OsDisk.Name)-OS-$($TopdeskActivityWithoutSpaces)"
-                $OsDiskSnapShotConfig = New-AzSnapshotConfig -SourceUri $Vm2Snapshot.StorageProfile.OsDisk.ManagedDisk.Id -CreateOption Copy -Location $Vm2Snapshot.Location --api-version 2022-03-02
-                New-AzSnapshot -Snapshot $OsDiskSnapShotConfig -SnapshotName $OsDiskSnapshotName -ResourceGroupName $Vm2Snapshot.ResourceGroupName
+                $OsDiskSnapShotConfig = New-AzSnapshotConfig -SourceUri $Vm2Snapshot.StorageProfile.OsDisk.ManagedDisk.Id -CreateOption Copy -Location $Vm2Snapshot.Location
+                New-AzSnapshot -Snapshot $OsDiskSnapShotConfig -SnapshotName $OsDiskSnapshotName -ResourceGroupName $Vm2Snapshot.ResourceGroupName --api-version 2022-03-02
                 Write-Output ("Creating snapshot from [ $($Vm2Snapshot.StorageProfile.OsDisk.Name) ] completed successfully")
 
                 # Evaluate if server has data disks, if so snapshot them
@@ -41,7 +41,7 @@ foreach ($vm in $vmList) {
                         $DataDiskSnapshotName = "$($DataDisk.Name)-LUN_$($DataDisk.Lun)-$($TopdeskActivityWithoutSpaces)"
                         $DataDiskSnapshotUri = (Get-AzDisk -DiskName $DataDisk.Name -ResourceGroupName $Vm2Snapshot.ResourceGroupName).Id
                         $DataDiskSnapShotConfig = New-AzSnapshotConfig -SourceUri $DataDiskSnapshotUri -CreateOption Copy -Incremental -Location $Vm2Snapshot.Location
-                        New-AzSnapshot -Snapshot $DataDiskSnapShotConfig -SnapshotName $DataDiskSnapshotName -ResourceGroupName $Vm2Snapshot.ResourceGroupName
+                        New-AzSnapshot -Snapshot $DataDiskSnapShotConfig -SnapshotName $DataDiskSnapshotName -ResourceGroupName $Vm2Snapshot.ResourceGroupName --api-version 2022-03-02
                         Write-Output ("Creating snapshot from [ $($DataDisk.Name) ] completed successfully")
                     }
                 } else {
